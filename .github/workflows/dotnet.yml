@@ -28,7 +28,8 @@ jobs:
       run: dotnet restore WebApplication1/WebApplication1.sln
     - name: Build
       # Build the WebApplication1 solution
-      run: dotnet build WebApplication1/WebApplication1.1sln --no-restore
+      # Corrected typo: changed 'WebApplication1.1sln' to 'WebApplication1.sln'
+      run: dotnet build WebApplication1/WebApplication1.sln --no-restore
     - name: Test
       # If you have a test project within the WebApplication1 solution, you can specify it
       # Otherwise, dotnet test might automatically discover tests if they are part of the solution.
