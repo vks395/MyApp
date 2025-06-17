@@ -19,10 +19,16 @@ jobs:
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
       with:
-        dotnet-version: 8.0.x
+        # Specify .NET 5.0 for your project
+        dotnet-version: 5.0.x
     - name: Restore dependencies
-      run: dotnet restore
+      # Restore dependencies for the WebApplication1 solution
+      run: dotnet restore WebApplication1/WebApplication1.sln
     - name: Build
-      run: dotnet build --no-restore
+      # Build the WebApplication1 solution
+      run: dotnet build WebApplication1/WebApplication1.sln --no-restore
     - name: Test
-      run: dotnet test --no-build --verbosity normal
+      # If you have a test project within the WebApplication1 solution, you can specify it
+      # Otherwise, dotnet test might automatically discover tests if they are part of the solution.
+      # Replace 'WebApplication1.Tests/WebApplication1.Tests.csproj' with the actual path to your test project if you have one.
+      run: dotnet test WebApplication1/WebApplication1.sln --no-build --verbosity normal
