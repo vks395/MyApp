@@ -17,12 +17,12 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
-    # Add a step to list files for debugging purposes
+    # Updated step to list files for debugging purposes using PowerShell's Get-ChildItem -Recurse
     - name: List files in repository
       run: |
-        dir /s
+        Get-ChildItem -Recurse
         # You can also list content of the specific directory if it exists
-        # dir WebApplication1\
+        # Get-ChildItem -Path WebApplication1\
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
       with:
