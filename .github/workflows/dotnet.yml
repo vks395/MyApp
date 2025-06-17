@@ -17,6 +17,12 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
+    # Add a step to list files for debugging purposes
+    - name: List files in repository
+      run: |
+        dir /s
+        # You can also list content of the specific directory if it exists
+        # dir WebApplication1\
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
       with:
@@ -28,7 +34,6 @@ jobs:
       run: dotnet restore WebApplication1/WebApplication1.sln
     - name: Build
       # Build the WebApplication1 solution
-      # Corrected typo: changed 'WebApplication1.1sln' to 'WebApplication1.sln'
       run: dotnet build WebApplication1/WebApplication1.sln --no-restore
     - name: Test
       # If you have a test project within the WebApplication1 solution, you can specify it
