@@ -21,6 +21,11 @@ jobs:
       with:
         # Specify .NET 5.0 for your project
         dotnet-version: 5.0.x
+    # Add a step to install libssl1.1-dev to address compatibility issues with .NET 5.0 on newer Ubuntu runners
+    - name: Install libssl1.1-dev
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y libssl1.1-dev
     - name: Restore dependencies
       # Restore dependencies for the WebApplication1 solution
       run: dotnet restore WebApplication1/WebApplication1.sln
