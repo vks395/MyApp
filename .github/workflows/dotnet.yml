@@ -17,26 +17,37 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
-    # Updated step to list files for debugging purposes using PowerShell's Get-ChildItem -Recurse
-    - name: List files in repository
-      run: |
-        Get-ChildItem -Recurse
-        # You can also list content of the specific directory if it exists
-        # Get-ChildItem -Path WebApplication1\
+
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
       with:
         # Specify .NET 5.0 for your project
         dotnet-version: 5.0.x
+
     # The libssl installation step is removed as it's not applicable for Windows runners
-    - name: Restore dependencies
-      # Restore dependencies for the WebApplication1 solution
-      run: dotnet restore WebApplication1/WebApplication1.sln
-    - name: Build
-      # Build the WebApplication1 solution
-      run: dotnet build WebApplication1/WebApplication1.sln --no-restore
-    - name: Test
-      # If you have a test project within the WebApplication1 solution, you can specify it
-      # Otherwise, dotnet test might automatically discover tests if they are part of the solution.
-      # Replace 'WebApplication1.Tests/WebApplication1.Tests.csproj' with the actual path to your test project if you have one.
-      run: dotnet test WebApplication1/WebApplication1.sln --no-build --verbosity normal
+    
+    - name: Find Solution File and Run Commands
+      id: find_solution
+      shell: pwsh # Ensure PowerShell is used for this step
+      run: |
+        $solutionFile = Get-ChildItem -Path . -Recurse -Filter "*.sln" | Select-Object -ExpandProperty FullName
+        if (-not $solutionFile) {
+            Write-Error "Solution file (.sln) not found in the repository."
+            exit 1
+        }
+        $solutionPath = Convert-Path $solutionFile # Get the absolute path
+        Write-Host "Found solution file: $solutionPath"
+        echo "::set-output name=solution_path::$solutionPath"
+
+        # Restore dependencies using the discovered path
+        Write-Host "--- Running dotnet restore ---"
+        dotnet restore $solutionPath
+
+        # Build the solution
+        Write-Host "--- Running dotnet build ---"
+        dotnet build $solutionPath --no-restore
+
+        # Test the solution
+        Write-Host "--- Running dotnet test ---"
+        dotnet test $solutionPath --no-build --verbosity normal
+
