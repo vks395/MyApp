@@ -12,7 +12,8 @@ on:
 jobs:
   build:
 
-    runs-on: ubuntu-latest
+    # Changed runner to windows-latest
+    runs-on: windows-latest
 
     steps:
     - uses: actions/checkout@v4
@@ -21,17 +22,13 @@ jobs:
       with:
         # Specify .NET 5.0 for your project
         dotnet-version: 5.0.x
-    # Add a step to install libssl1.1-dev to address compatibility issues with .NET 5.0 on newer Ubuntu runners
-    - name: Install libssl1.1-dev
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y libssl1.1-dev
+    # The libssl installation step is removed as it's not applicable for Windows runners
     - name: Restore dependencies
       # Restore dependencies for the WebApplication1 solution
       run: dotnet restore WebApplication1/WebApplication1.sln
     - name: Build
       # Build the WebApplication1 solution
-      run: dotnet build WebApplication1/WebApplication1.sln --no-restore
+      run: dotnet build WebApplication1/WebApplication1.1sln --no-restore
     - name: Test
       # If you have a test project within the WebApplication1 solution, you can specify it
       # Otherwise, dotnet test might automatically discover tests if they are part of the solution.
